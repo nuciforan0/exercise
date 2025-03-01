@@ -13,38 +13,46 @@
             display: flex;
             flex-direction: column;
         }
-
+    
         .container {
-        margin: 0;
-        padding: 10px;
-        box-shadow: none;
-        border-radius: 0;
-    }
-
+            margin: 0;
+            padding: 10px;
+            box-shadow: none;
+            border-radius: 0;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+    
         .left-panel {
             flex: 2;
             padding-right: 20px;
             display: flex;
             flex-direction: column;
+            overflow-y: auto;
+            padding-bottom: 20px;
         }
-
+    
         .right-panel {
             flex: 1;
             text-align: center;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start;
+            height: 100vh;
+            padding: 20px 0;
         }
-
+    
         .exercise-image {
             width: 100%;
             margin: 10px 0;
         }
-
+    
         .reps-display {
             display: none;
         }
-
+    
         .reps-info {
             position: absolute;
             top: 20px;
@@ -52,20 +60,36 @@
             font-size: 20px;
             margin: 0;
         }
-
-
+    
+        .complete-button, .skip-button {
+            width: 100%;
+            border: none;
+            border-radius: 8px;
+            font-size: 24px;
+            margin: 0;
+            transition: all 0.2s ease;
+        }
+    
         .complete-button {
-            flex-grow: 2;
             background-color: #2ecc71;
-            padding: 35px 20px;
+            min-height: 35vh;
+            margin-bottom: 15px;
         }
-
+    
         .skip-button {
-            flex-grow: 1;
             background-color: #f39c12;
-            padding: 25px 20px;
+            min-height: 25vh;
         }
-
+    
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            height: 65vh;
+            justify-content: flex-end;
+            width: 100%;
+            gap: 15px;
+        }
+    
         .explanation {
             margin-top: 20px;
             display: none;
@@ -74,70 +98,96 @@
             border-radius: 5px;
             font-size: 18px;
         }
-
+    
         .explanation::before {
             content: "Sets: " attr(data-sets);
             display: block;
             margin-bottom: 10px;
             font-weight: bold;
         }
-
+    
         .exercise-title {
             font-size: 24px;
             margin-bottom: 10px;
         }
-
+    
         .exercise-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
         }
-
-
-
+    
+        .toggle-explanation {
+            color: #3498db;
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
+        }
+    
+        .toggle-explanation:hover {
+            background-color: #f0f0f0;
+        }
+    
         .detail-item {
             margin: 15px 0;
             font-size: 20px;
         }
-
-        .button-group {
-            width: 100%;
-            gap: 15px;
-            margin-top: auto;
-        }
-
-
+    
         .detail-item[strong="Sets:"] {
             display: none;
         }
-
+    
         @media (max-width: 768px) {
-        .exercise-title {
-            font-size: 22px;
-            margin-bottom: 0;
+            body {
+                background-color: white;
+                height: auto;
+                min-height: 100vh;
+            }
+    
+            .container {
+                flex-direction: column;
+                margin: 0;
+                padding: 10px;
+            }
+    
+            .left-panel {
+                order: 2;
+                padding-right: 0;
+            }
+    
+            .right-panel {
+                order: 1;
+                margin-bottom: 15px;
+            }
+    
+            .exercise-title {
+                font-size: 22px;
+                margin-bottom: 0;
+            }
+    
+            .toggle-explanation {
+                font-size: 16px;
+                padding: 6px 10px;
+            }
+    
+            .complete-button {
+                min-height: 30vh;
+                font-size: 22px;
+            }
+    
+            .skip-button {
+                min-height: 20vh;
+                font-size: 20px;
+            }
+    
+            .button-group {
+                height: 55vh;
+            }
         }
-
-        .toggle-explanation {
-            font-size: 16px;
-        }
-
-        .complete-button {
-            padding: 30px 15px;
-            font-size: 18px;
-        }
-
-        .skip-button {
-            padding: 22px 15px;
-            font-size: 18px;
-        }
-
-        .right-panel {
-            margin-bottom: 15px;
-        }
-    }
-
-        
     </style>
 </head>
 <body>
