@@ -15,15 +15,11 @@
         }
 
         .container {
-            display: flex;
-            justify-content: space-between;
-            flex-grow: 1;
-            margin: 20px;
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
+        margin: 0;
+        padding: 10px;
+        box-shadow: none;
+        border-radius: 0;
+    }
 
         .left-panel {
             flex: 2;
@@ -41,35 +37,31 @@
         }
 
         .exercise-image {
-            width: 90%;
-            max-height: 50vh;
-            object-fit: contain;
-            margin-bottom: 20px;
-            border-radius: 5px;
+            width: 100%;
+            margin: 10px 0;
         }
 
         .reps-display {
-            font-size: 72px;
-            font-weight: bold;
-            margin: 20px 0;
-            color: #2c3e50;
+            display: none;
         }
 
         .reps-info {
-            font-size: 24px;
-            margin-bottom: 20px;
-            color: #666;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 20px;
+            margin: 0;
         }
 
-        .complete-button {
-            padding: 25px 40px;
-            font-size: 24px;
-            background-color: #3498db;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            margin: 20px;
+        .complete-button, .skip-button {
+            width: 100%;
+            padding: 30px 20px;
+            font-size: 20px;
+            margin: 10px 0;
+        }
+
+        .skip-button {
+            background-color: #f39c12;
         }
 
         .explanation {
@@ -81,38 +73,67 @@
             font-size: 18px;
         }
 
-        .exercise-title {
-            font-size: 36px;
-            margin-bottom: 20px;
-            color: #2c3e50;
+        .explanation::before {
+            content: "Sets: " attr(data-sets);
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
         }
+
+        .exercise-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
 
         .detail-item {
             margin: 15px 0;
             font-size: 20px;
         }
+
         .button-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+            margin-top: auto;
+            padding: 10px 0;
+        }
+
+        .detail-item[strong="Sets:"] {
+            display: none;
         }
 
         @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
-                margin: 10px;
-                padding: 10px;
-            }
-
-            .exercise-image {
-                max-height: 40vh;
-            }
-
-            .complete-button, .skip-button {
-                padding: 15px;
-                font-size: 20px;
-            }
+        body {
+            background-color: white;
+            height: auto;
+            min-height: 100vh;
         }
+
+        .container {
+            flex-direction: column;
+            margin: 0;
+            padding: 10px;
+        }
+
+        .left-panel {
+            order: 2;
+            padding-right: 0;
+        }
+
+        .right-panel {
+            order: 1;
+            margin-bottom: 20px;
+        }
+
+        .toggle-explanation {
+            order: 3;
+            margin-top: 20px;
+            text-align: center;
+            color: #3498db;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    }
+
+        
     </style>
 </head>
 <body>
@@ -160,7 +181,9 @@
             document.getElementById('reps-info').textContent = `${currentRepCount}/${exercise.Reps}`;
             
             let detailsHtml = '';
-            if (exercise.Sets && exercise.Sets !== 'NaN') detailsHtml += `<div class="detail-item"><strong>Sets:</strong> ${exercise.Sets}</div>`;
+            if (exercise.Sets && exercise.Sets !== 'NaN') {
+                document.getElementById('explanation').dataset.sets = exercise.Sets;
+            }
             if (exercise.Duration && exercise.Duration !== 'NaN') detailsHtml += `<div class="detail-item"><strong>Duration:</strong> ${exercise.Duration}</div>`;
             if (exercise.Notes && exercise.Notes !== 'NaN') detailsHtml += `<div class="detail-item"><strong>Notes:</strong> ${exercise.Notes}</div>`;
             
