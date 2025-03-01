@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercise Program</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            height: 100vh;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            flex-grow: 1;
+            margin: 20px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .left-panel {
+            flex: 2;
+            padding-right: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .right-panel {
+            flex: 1;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .exercise-image {
+            width: 90%;
+            max-height: 50vh;
+            object-fit: contain;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+
+        .reps-display {
+            font-size: 72px;
+            font-weight: bold;
+            margin: 20px 0;
+            color: #2c3e50;
+        }
+
+        .reps-info {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #666;
+        }
+
+        .complete-button {
+            padding: 25px 40px;
+            font-size: 24px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 20px;
+        }
+
+        .explanation {
+            margin-top: 20px;
+            display: none;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 18px;
+        }
+
+        .exercise-title {
+            font-size: 36px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .detail-item {
+            margin: 15px 0;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left-panel">
+            <img id="exercise-image" class="exercise-image">
+            <div class="exercise-title" id="exercise-name"></div>
+            <div id="details"></div>
+            <div class="explanation" id="explanation"></div>
+            <div class="toggle-explanation" onclick="toggleExplanation()">Show/Hide Explanation</div>
+        </div>
+        <div class="right-panel">
+            <div class="reps-display" id="reps-display">0</div>
+            <div class="reps-info" id="reps-info">0/0</div>
+            <button class="complete-button" onclick="incrementRep()">Complete Rep</button>
+        </div>
+    </div>
+
+    <script>
+        let exerciseData = {};
+        let currentSectionIndex = 0;
+        let currentExerciseIndex = 0;
+        let currentRepCount = 0;
+        let sections = [];
+
+        function updateDisplay() {
+            const currentSection = sections[currentSectionIndex];
+            const exercise = exerciseData[currentSection][currentExerciseIndex];
+            
+            // Update image
+            const imgElement = document.getElementById('exercise-image');
+            if (exercise.Images && exercise.Images !== 'NaN') {
+                imgElement.src = exercise.Images;
+                imgElement.style.display = 'block';
+            } else {
+                imgElement.style.display = 'none';
+            }
+            
+            // Update other elements
+            document.getElementById('exercise-name').textContent = exercise.Name;
+            document.getElementById('reps-display').textContent = currentRepCount;
+            document.getElementById('reps-info').textContent = `${currentRepCount}/${exercise.Reps}`;
+            
+            let detailsHtml = '';
+            if (exercise.Sets && exercise.Sets !== 'NaN') detailsHtml += `<div class="detail-item"><strong>Sets:</strong> ${exercise.Sets}</div>`;
+            if (exercise.Duration && exercise.Duration !== 'NaN') detailsHtml += `<div class="detail-item"><strong>Duration:</strong> ${exercise.Duration}</div>`;
+            if (exercise.Notes && exercise.Notes !== 'NaN') detailsHtml += `<div class="detail-item"><strong>Notes:</strong> ${exercise.Notes}</div>`;
+            
+            document.getElementById('details').innerHTML = detailsHtml;
+            document.getElementById('explanation').textContent = exercise.Explanation;
+        }
+
+        function incrementRep() {
+            const currentExercise = exerciseData[sections[currentSectionIndex]][currentExerciseIndex];
+            currentRepCount++;
+            
+            if (currentRepCount >= currentExercise.Reps) {
+                currentRepCount = 0;
+                currentExerciseIndex++;
+                
+                if (currentExerciseIndex >= exerciseData[sections[currentSectionIndex]].length) {
+                    currentSectionIndex++;
+                    currentExerciseIndex = 0;
+                    
+                    if (currentSectionIndex >= sections.length) {
+                        alert('Workout complete!');
+                        return;
+                    }
+                }
+            }
+            
+            updateDisplay();
+        }
+
+        function toggleExplanation() {
+            const explanation = document.getElementById('explanation');
+            explanation.style.display = explanation.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Load JSON data
+        fetch('exercise_data.json')
+            .then(response => response.json())
+            .then(data => {
+                exerciseData = data;
+                sections = Object.keys(exerciseData);
+                updateDisplay();
+            })
+            .catch(error => {
+                console.error('Error loading exercise data:', error);
+                alert('Failed to load exercise data. Please check the JSON file.');
+            });
+    </script>
+</body>
+</html>
