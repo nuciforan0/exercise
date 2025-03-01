@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Exercise Program</title>
     <style>
         body {
@@ -91,6 +91,28 @@
             margin: 15px 0;
             font-size: 20px;
         }
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                margin: 10px;
+                padding: 10px;
+            }
+
+            .exercise-image {
+                max-height: 40vh;
+            }
+
+            .complete-button, .skip-button {
+                padding: 15px;
+                font-size: 20px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -105,7 +127,10 @@
         <div class="right-panel">
             <div class="reps-display" id="reps-display">0</div>
             <div class="reps-info" id="reps-info">0/0</div>
-            <button class="complete-button" onclick="incrementRep()">Complete Rep</button>
+            <div class="button-group">
+                <button class="complete-button" onclick="incrementRep()">Complete Rep</button>
+                <button class="skip-button" onclick="skipExercise()">Skip Exercise</button>
+            </div>
         </div>
     </div>
 
@@ -168,6 +193,23 @@
         function toggleExplanation() {
             const explanation = document.getElementById('explanation');
             explanation.style.display = explanation.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function skipExercise() {
+            currentRepCount = 0;
+            currentExerciseIndex++;
+            
+            if (currentExerciseIndex >= exerciseData[sections[currentSectionIndex]].length) {
+                currentSectionIndex++;
+                currentExerciseIndex = 0;
+                
+                if (currentSectionIndex >= sections.length) {
+                    alert('Workout complete!');
+                    return;
+                }
+            }
+            
+            updateDisplay();
         }
 
         // Load JSON data
