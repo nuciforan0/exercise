@@ -8,106 +8,29 @@
         body {
             font-family: Arial, sans-serif;
             margin: 0;
+            padding: 0;
             height: 100vh;
             background-color: #f0f0f0;
-            display: flex;
-            flex-direction: column;
         }
     
         .container {
-            margin: 0;
-            padding: 10px;
-            box-shadow: none;
-            border-radius: 0;
-            height: 100vh;
-            overflow: hidden;
             display: flex;
             flex-direction: column;
+            height: 100vh;
+            width: 100%;
+            overflow: hidden;
         }
     
-        .left-panel {
-            flex: 2;
-            padding-right: 20px;
+        .content-area {
+            flex: 1;
             display: flex;
             flex-direction: column;
             overflow-y: auto;
-            padding-bottom: 20px;
-        }
-    
-        .right-panel {
-            flex: 1;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            height: 100vh;
-            padding: 20px 0;
+            padding: 10px;
         }
     
         .exercise-image {
             width: 100%;
-            margin: 10px 0;
-        }
-    
-        .reps-display {
-            display: none;
-        }
-    
-        .reps-info {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 20px;
-            margin: 0;
-        }
-    
-        .complete-button, .skip-button {
-            width: 100%;
-            border: none;
-            border-radius: 8px;
-            font-size: 24px;
-            margin: 0;
-            transition: all 0.2s ease;
-        }
-    
-        .complete-button {
-            background-color: #2ecc71;
-            min-height: 35vh;
-            margin-bottom: 15px;
-        }
-    
-        .skip-button {
-            background-color: #f39c12;
-            min-height: 25vh;
-        }
-    
-        .button-group {
-            display: flex;
-            flex-direction: column;
-            height: 65vh;
-            justify-content: flex-end;
-            width: 100%;
-            gap: 15px;
-        }
-    
-        .explanation {
-            margin-top: 20px;
-            display: none;
-            background-color: #f8f9fa;
-            padding: 15px;
-            border-radius: 5px;
-            font-size: 18px;
-        }
-    
-        .explanation::before {
-            content: "Sets: " attr(data-sets);
-            display: block;
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
-    
-        .exercise-title {
-            font-size: 24px;
             margin-bottom: 10px;
         }
     
@@ -116,6 +39,11 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
+        }
+    
+        .exercise-title {
+            font-size: 24px;
+            margin-bottom: 0;
         }
     
         .toggle-explanation {
@@ -133,66 +61,110 @@
         }
     
         .detail-item {
-            margin: 15px 0;
-            font-size: 20px;
+            margin: 10px 0;
+            font-size: 18px;
         }
     
-        .detail-item[strong="Sets:"] {
+        .explanation {
+            margin-top: 10px;
             display: none;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+    
+        .explanation::before {
+            content: "Sets: " attr(data-sets);
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+    
+        .button-area {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+    
+        .complete-button, .skip-button {
+            width: 100%;
+            border: none;
+            font-size: 24px;
+            color: white;
+            padding: 0;
+            transition: all 0.2s ease;
+        }
+    
+        .complete-button {
+            background-color: #2ecc71;
+            flex: 1;
+            min-height: 100px;
+            margin-bottom: 2px;
+        }
+    
+        .skip-button {
+            background-color: #f39c12;
+            height: 80px;
+        }
+    
+        .reps-info {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 18px;
+            margin: 0;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 5px 10px;
+            border-radius: 5px;
         }
     
         @media (max-width: 768px) {
-            body {
-                background-color: white;
-                height: auto;
-                min-height: 100vh;
-            }
-    
             .container {
+                display: flex;
                 flex-direction: column;
-                margin: 0;
-                padding: 10px;
             }
-    
-            .left-panel {
-                order: 2;
-                padding-right: 0;
-            }
-    
-            .right-panel {
+            
+            .content-area {
                 order: 1;
-                margin-bottom: 15px;
+                flex: 1;
+                overflow-y: auto;
             }
-    
+            
+            .button-area {
+                order: 2;
+                height: auto;
+            }
+            
             .exercise-title {
-                font-size: 22px;
-                margin-bottom: 0;
-            }
-    
-            .toggle-explanation {
-                font-size: 16px;
-                padding: 6px 10px;
-            }
-    
-            .complete-button {
-                min-height: 30vh;
-                font-size: 22px;
-            }
-    
-            .skip-button {
-                min-height: 20vh;
                 font-size: 20px;
             }
-    
-            .button-group {
-                height: 55vh;
+            
+            .toggle-explanation {
+                font-size: 16px;
+                padding: 5px 8px;
+            }
+            
+            .detail-item {
+                font-size: 16px;
+                margin: 8px 0;
+            }
+            
+            .complete-button {
+                min-height: 120px;
+                font-size: 22px;
+            }
+            
+            .skip-button {
+                height: 70px;
+                font-size: 20px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="left-panel">
+        <div class="content-area">
             <img id="exercise-image" class="exercise-image">
             <div class="exercise-header">
                 <div class="exercise-title" id="exercise-name"></div>
@@ -200,14 +172,11 @@
             </div>
             <div id="details"></div>
             <div class="explanation" id="explanation"></div>
-        </div>
-        <div class="right-panel">
-            <div class="reps-display" id="reps-display">0</div>
             <div class="reps-info" id="reps-info">0/0</div>
-            <div class="button-group">
-                <button class="complete-button" onclick="incrementRep()">Complete Rep</button>
-                <button class="skip-button" onclick="skipExercise()">Skip Exercise</button>
-            </div>
+        </div>
+        <div class="button-area">
+            <button class="complete-button" onclick="incrementRep()">Complete Rep</button>
+            <button class="skip-button" onclick="skipExercise()">Skip Exercise</button>
         </div>
     </div>
 
@@ -233,7 +202,6 @@
             
             // Update other elements
             document.getElementById('exercise-name').textContent = exercise.Name;
-            document.getElementById('reps-display').textContent = currentRepCount;
             document.getElementById('reps-info').textContent = `${currentRepCount}/${exercise.Reps}`;
             
             let detailsHtml = '';
