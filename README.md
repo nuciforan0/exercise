@@ -8,3 +8,5 @@ run html
 
 
 profit
+
+also designed for mobile, open https://nuciforan0.github.io/exercise/exerciseProgram.html on ur phone i cant be bothered with css lol 
