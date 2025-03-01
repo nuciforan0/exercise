@@ -6,40 +6,47 @@
     <title>Exercise Program</title>
     <style>
         body {
+            font-family: Arial, sans-serif;
             margin: 0;
             height: 100vh;
-            background: white;
-            font-family: Arial, sans-serif;
-        }
-
-    
-        .container {
+            background-color: #f0f0f0;
             display: flex;
             flex-direction: column;
+        }
+    
+        .container {
+            margin: 0;
+            padding: 10px;
+            box-shadow: none;
+            border-radius: 0;
             height: 100vh;
-            padding: 0 10px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
     
         .left-panel {
-            flex: 1;
+            flex: 2;
+            padding-right: 20px;
+            display: flex;
+            flex-direction: column;
             overflow-y: auto;
-            padding-bottom: 20vh; /* Space for buttons */
+            padding-bottom: 20px;
         }
     
         .right-panel {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: white;
-            padding: 15px 10px;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            flex: 1;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            height: 100vh;
+            padding: 20px 0;
         }
     
         .exercise-image {
             width: 100%;
-            margin: 15px 0;
-            border-radius: 8px;
+            margin: 10px 0;
         }
     
         .reps-display {
@@ -58,34 +65,38 @@
             width: 100%;
             border: none;
             border-radius: 8px;
-            font-size: 22px;
-            padding: 25px;
+            font-size: 24px;
+            margin: 0;
+            transition: all 0.2s ease;
         }
     
         .complete-button {
-            background: #2ecc71;
-            color: white;
+            background-color: #2ecc71;
+            min-height: 35vh;
+            margin-bottom: 15px;
         }
-
+    
         .skip-button {
-            background: #f39c12;
-            color: white;
+            background-color: #f39c12;
+            min-height: 25vh;
         }
-
     
         .button-group {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            height: 65vh;
+            justify-content: flex-end;
+            width: 100%;
+            gap: 15px;
         }
     
         .explanation {
-            background: #f8f9fa;
+            margin-top: 20px;
+            display: none;
+            background-color: #f8f9fa;
             padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-            position: relative;
-            z-index: 1; /* Keep above buttons */
+            border-radius: 5px;
+            font-size: 18px;
         }
     
         .explanation::before {
@@ -97,22 +108,24 @@
     
         .exercise-title {
             font-size: 24px;
-            margin: 0;
+            margin-bottom: 10px;
         }
     
         .exercise-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin: 15px 0;
+            margin-bottom: 15px;
         }
-
     
         .toggle-explanation {
             color: #3498db;
             text-decoration: underline;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 18px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
         }
     
         .toggle-explanation:hover {
@@ -136,17 +149,19 @@
             }
     
             .container {
-                flex-direction: row;
+                flex-direction: column;
+                margin: 0;
+                padding: 10px;
             }
     
             .left-panel {
-                padding-right: 20px;
+                order: 2;
+                padding-right: 0;
             }
     
             .right-panel {
-                position: static;
-                box-shadow: none;
-                padding: 0;
+                order: 1;
+                margin-bottom: 15px;
             }
     
             .exercise-title {
