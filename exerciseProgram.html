@@ -53,15 +53,17 @@
             margin: 0;
         }
 
-        .complete-button, .skip-button {
-            width: 100%;
-            padding: 30px 20px;
-            font-size: 20px;
-            margin: 10px 0;
+
+        .complete-button {
+            flex-grow: 2;
+            background-color: #2ecc71;
+            padding: 35px 20px;
         }
 
         .skip-button {
+            flex-grow: 1;
             background-color: #f39c12;
+            padding: 25px 20px;
         }
 
         .explanation {
@@ -85,6 +87,14 @@
             margin-bottom: 10px;
         }
 
+        .exercise-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+
 
         .detail-item {
             margin: 15px 0;
@@ -92,44 +102,38 @@
         }
 
         .button-group {
+            width: 100%;
+            gap: 15px;
             margin-top: auto;
-            padding: 10px 0;
         }
+
 
         .detail-item[strong="Sets:"] {
             display: none;
         }
 
         @media (max-width: 768px) {
-        body {
-            background-color: white;
-            height: auto;
-            min-height: 100vh;
-        }
-
-        .container {
-            flex-direction: column;
-            margin: 0;
-            padding: 10px;
-        }
-
-        .left-panel {
-            order: 2;
-            padding-right: 0;
-        }
-
-        .right-panel {
-            order: 1;
-            margin-bottom: 20px;
+        .exercise-title {
+            font-size: 22px;
+            margin-bottom: 0;
         }
 
         .toggle-explanation {
-            order: 3;
-            margin-top: 20px;
-            text-align: center;
-            color: #3498db;
-            text-decoration: underline;
-            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .complete-button {
+            padding: 30px 15px;
+            font-size: 18px;
+        }
+
+        .skip-button {
+            padding: 22px 15px;
+            font-size: 18px;
+        }
+
+        .right-panel {
+            margin-bottom: 15px;
         }
     }
 
@@ -140,10 +144,12 @@
     <div class="container">
         <div class="left-panel">
             <img id="exercise-image" class="exercise-image">
-            <div class="exercise-title" id="exercise-name"></div>
+            <div class="exercise-header">
+                <div class="exercise-title" id="exercise-name"></div>
+                <div class="toggle-explanation" onclick="toggleExplanation()">Explanation</div>
+            </div>
             <div id="details"></div>
             <div class="explanation" id="explanation"></div>
-            <div class="toggle-explanation" onclick="toggleExplanation()">Show/Hide Explanation</div>
         </div>
         <div class="right-panel">
             <div class="reps-display" id="reps-display">0</div>
