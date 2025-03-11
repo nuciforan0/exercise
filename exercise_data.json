@@ -1,22 +1,22 @@
 {
     "SECTION A": [
         {
-            "Name": "Quadricepts foam roll (L)",
+            "Name": "Quadricepts foam roll",
             "Sets": 1,
             "Reps": 1,
             "Duration": "1 minute",
-            "Notes": null,
+            "Notes": "Left leg",
             "Explanation": "Lie on your front and place the foam roller underneath your leg.\n Bend the opposite leg and bring it out to the side to help you move back and forth.\n Roll the entire length of the thigh muscle, staying off the knee joint.",
-            "Images": "Section A/Quadricepts foam roll (L).JPG"
+            "Images": "Section A/Quadricepts foam roll.JPG"
         },
         {
-            "Name": "Quadricepts foam roll (R)",
+            "Name": "Quadricepts foam roll",
             "Sets": 1,
             "Reps": 1,
             "Duration": "1 minute",
-            "Notes": null,
+            "Notes": "Right leg",
             "Explanation": "Lie on your front and place the foam roller underneath your leg.\n Bend the opposite leg and bring it out to the side to help you move back and forth.\n Roll the entire length of the thigh muscle, staying off the knee joint.",
-            "Images": "Section A/Quadricepts foam roll (R).JPG"
+            "Images": "Section A/Quadricepts foam roll.JPG"
         }
     ],
     "SECTION B": [
