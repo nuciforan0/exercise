@@ -29,6 +29,7 @@
             display: flex;
             flex-direction: column;
             overflow-y: auto;
+            position: relative;
         }
     
         .exercise-image {
@@ -123,6 +124,25 @@
             padding: 5px 10px;
             border-radius: 5px;
         }
+        
+        .exercise-count {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 18px;
+            margin: 0;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        
+        .timer-display {
+            font-size: 28px;
+            text-align: center;
+            margin: 10px 0;
+            font-weight: bold;
+            display: none;
+        }
     
         @media (max-width: 768px) {
             .container {
@@ -176,9 +196,11 @@
             <div id="details"></div>
             <div class="explanation" id="explanation"></div>
             <div class="reps-info" id="reps-info">0/0</div>
+            <div class="exercise-count" id="exercise-count">0/0 exercises</div>
+            <div class="timer-display" id="timer-display">00:00</div>
         </div>
         <div class="button-area">
-            <button class="complete-button" onclick="incrementRep()">Complete Rep</button>
+            <button class="complete-button" id="action-button" onclick="handleAction()">Complete Rep</button>
             <button class="skip-button" onclick="skipExercise()">Skip Exercise</button>
         </div>
     </div>
@@ -189,6 +211,11 @@
         let currentExerciseIndex = 0;
         let currentRepCount = 0;
         let sections = [];
+        let timerInterval = null;
+        let timerSeconds = 0;
+        let timerActive = false;
+        let totalExerciseCount = 0;
+        let currentExerciseCount = 0;
 
         function updateDisplay() {
             const currentSection = sections[currentSectionIndex];
@@ -207,6 +234,23 @@
             document.getElementById('exercise-name').textContent = exercise.Name;
             document.getElementById('reps-info').textContent = `${currentRepCount}/${exercise.Reps}`;
             
+            // Calculate total exercise count if not done yet
+            if (totalExerciseCount === 0) {
+                sections.forEach(section => {
+                    totalExerciseCount += exerciseData[section].length;
+                });
+            }
+            
+            // Calculate current exercise count
+            currentExerciseCount = 0;
+            for (let i = 0; i < currentSectionIndex; i++) {
+                currentExerciseCount += exerciseData[sections[i]].length;
+            }
+            currentExerciseCount += currentExerciseIndex + 1;
+            
+            document.getElementById('exercise-count').textContent = 
+                `${currentExerciseCount}/${totalExerciseCount} exercises`;
+            
             let detailsHtml = '';
             if (exercise.Sets && exercise.Sets !== 'NaN') {
                 document.getElementById('explanation').dataset.sets = exercise.Sets;
@@ -216,6 +260,100 @@
             
             document.getElementById('details').innerHTML = detailsHtml;
             document.getElementById('explanation').textContent = exercise.Explanation;
+            
+            // Update button text based on exercise duration
+            const actionButton = document.getElementById('action-button');
+            const timerDisplay = document.getElementById('timer-display');
+            
+            // Reset timer-related elements
+            stopTimer();
+            timerDisplay.style.display = 'none';
+            timerActive = false;
+            
+            // Check if this exercise needs a timer (duration > 5 seconds)
+            if (exercise.Duration) {
+                const durationInSeconds = parseDuration(exercise.Duration);
+                if (durationInSeconds > 5) {
+                    actionButton.textContent = 'Start Rep';
+                } else {
+                    actionButton.textContent = 'Complete Rep';
+                }
+            } else {
+                actionButton.textContent = 'Complete Rep';
+            }
+        }
+        
+        function parseDuration(durationString) {
+            // Parse duration strings like "30s", "1m", "1m 30s", etc.
+            let totalSeconds = 0;
+            
+            // Extract minutes
+            const minutesMatch = durationString.match(/(\d+)m/);
+            if (minutesMatch) totalSeconds += parseInt(minutesMatch[1]) * 60;
+            
+            // Extract seconds
+            const secondsMatch = durationString.match(/(\d+)s/);
+            if (secondsMatch) totalSeconds += parseInt(secondsMatch[1]);
+            
+            return totalSeconds;
+        }
+        
+        function handleAction() {
+            const currentSection = sections[currentSectionIndex];
+            const exercise = exerciseData[currentSection][currentExerciseIndex];
+            const actionButton = document.getElementById('action-button');
+            const timerDisplay = document.getElementById('timer-display');
+            
+            // Check if this exercise needs a timer
+            if (exercise.Duration) {
+                const durationInSeconds = parseDuration(exercise.Duration);
+                
+                if (durationInSeconds > 5) {
+                    if (!timerActive) {
+                        // Start timer
+                        timerActive = true;
+                        timerSeconds = 0;
+                        actionButton.textContent = `Stop Rep (${formatTime(durationInSeconds)})`;
+                        timerDisplay.style.display = 'block';
+                        timerDisplay.textContent = formatTime(timerSeconds);
+                        
+                        timerInterval = setInterval(() => {
+                            timerSeconds++;
+                            timerDisplay.textContent = formatTime(timerSeconds);
+                            
+                            if (timerSeconds >= durationInSeconds) {
+                                stopTimer();
+                                timerActive = false;
+                                actionButton.textContent = 'Start Rep';
+                                timerDisplay.style.display = 'none';
+                            }
+                        }, 1000);
+                    } else {
+                        // Stop timer
+                        stopTimer();
+                        timerActive = false;
+                        actionButton.textContent = 'Start Rep';
+                        timerDisplay.style.display = 'none';
+                    }
+                    return;
+                }
+            }
+            
+            // For non-timed exercises or those <= 5 seconds, increment rep count
+            incrementRep();
+        }
+        
+        function stopTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+        }
+        
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
         }
 
         function incrementRep() {
@@ -246,6 +384,10 @@
         }
 
         function skipExercise() {
+            // Stop any active timer
+            stopTimer();
+            timerActive = false;
+            
             currentRepCount = 0;
             currentExerciseIndex++;
             
