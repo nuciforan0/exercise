@@ -135,14 +135,6 @@
             padding: 5px 10px;
             border-radius: 5px;
         }
-        
-        .timer-display {
-            font-size: 28px;
-            text-align: center;
-            margin: 10px 0;
-            font-weight: bold;
-            display: none;
-        }
     
         @media (max-width: 768px) {
             .container {
@@ -196,8 +188,7 @@
             <div id="details"></div>
             <div class="explanation" id="explanation"></div>
             <div class="reps-info" id="reps-info">0/0</div>
-            <div class="exercise-count" id="exercise-count">0/0 exercises</div>
-            <div class="timer-display" id="timer-display">00:00</div>
+            <div class="exercise-count" id="exercise-count">0/0 sets</div>
         </div>
         <div class="button-area">
             <button class="complete-button" id="action-button" onclick="handleAction()">Complete Rep</button>
@@ -216,6 +207,7 @@
         let timerActive = false;
         let totalExerciseCount = 0;
         let currentExerciseCount = 0;
+        let targetDuration = 0;
 
         function updateDisplay() {
             const currentSection = sections[currentSectionIndex];
@@ -249,7 +241,7 @@
             currentExerciseCount += currentExerciseIndex + 1;
             
             document.getElementById('exercise-count').textContent = 
-                `${currentExerciseCount}/${totalExerciseCount} exercises`;
+                `${currentExerciseCount}/${totalExerciseCount} sets`;
             
             let detailsHtml = '';
             if (exercise.Sets && exercise.Sets !== 'NaN') {
@@ -263,16 +255,16 @@
             
             // Update button text based on exercise duration
             const actionButton = document.getElementById('action-button');
-            const timerDisplay = document.getElementById('timer-display');
             
             // Reset timer-related elements
             stopTimer();
-            timerDisplay.style.display = 'none';
             timerActive = false;
             
-            // Check if this exercise needs a timer (duration > 5 seconds)
+            // Check if this exercise needs a timer
             if (exercise.Duration) {
                 const durationInSeconds = parseDuration(exercise.Duration);
+                targetDuration = durationInSeconds;
+                
                 if (durationInSeconds > 5) {
                     actionButton.textContent = 'Start Rep';
                 } else {
@@ -287,13 +279,19 @@
             // Parse duration strings like "30s", "1m", "1m 30s", etc.
             let totalSeconds = 0;
             
-            // Extract minutes
-            const minutesMatch = durationString.match(/(\d+)m/);
-            if (minutesMatch) totalSeconds += parseInt(minutesMatch[1]) * 60;
-            
-            // Extract seconds
-            const secondsMatch = durationString.match(/(\d+)s/);
-            if (secondsMatch) totalSeconds += parseInt(secondsMatch[1]);
+            if (durationString.includes("minute")) {
+                // Handle "1 minute" format
+                const minutesMatch = durationString.match(/(\d+)\s*minute/);
+                if (minutesMatch) totalSeconds += parseInt(minutesMatch[1]) * 60;
+            } else {
+                // Extract minutes with "m"
+                const minutesMatch = durationString.match(/(\d+)m/);
+                if (minutesMatch) totalSeconds += parseInt(minutesMatch[1]) * 60;
+                
+                // Extract seconds with "s"
+                const secondsMatch = durationString.match(/(\d+)s/);
+                if (secondsMatch) totalSeconds += parseInt(secondsMatch[1]);
+            }
             
             return totalSeconds;
         }
@@ -302,7 +300,6 @@
             const currentSection = sections[currentSectionIndex];
             const exercise = exerciseData[currentSection][currentExerciseIndex];
             const actionButton = document.getElementById('action-button');
-            const timerDisplay = document.getElementById('timer-display');
             
             // Check if this exercise needs a timer
             if (exercise.Duration) {
@@ -313,27 +310,23 @@
                         // Start timer
                         timerActive = true;
                         timerSeconds = 0;
-                        actionButton.textContent = `Stop Rep (${formatTime(durationInSeconds)})`;
-                        timerDisplay.style.display = 'block';
-                        timerDisplay.textContent = formatTime(timerSeconds);
+                        actionButton.textContent = formatTime(timerSeconds);
                         
                         timerInterval = setInterval(() => {
                             timerSeconds++;
-                            timerDisplay.textContent = formatTime(timerSeconds);
+                            actionButton.textContent = formatTime(timerSeconds);
                             
                             if (timerSeconds >= durationInSeconds) {
                                 stopTimer();
                                 timerActive = false;
-                                actionButton.textContent = 'Start Rep';
-                                timerDisplay.style.display = 'none';
+                                incrementRep();
                             }
                         }, 1000);
                     } else {
-                        // Stop timer
+                        // Stop timer early
                         stopTimer();
                         timerActive = false;
                         actionButton.textContent = 'Start Rep';
-                        timerDisplay.style.display = 'none';
                     }
                     return;
                 }
@@ -353,7 +346,7 @@
         function formatTime(seconds) {
             const mins = Math.floor(seconds / 60);
             const secs = seconds % 60;
-            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
         }
 
         function incrementRep() {
