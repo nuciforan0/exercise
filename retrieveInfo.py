@@ -53,7 +53,7 @@ for i, section in enumerate(section_headers):
 # Convert the dictionary to JSON
 json_output = json.dumps(exercise_data, indent=4)
 
-# Print the JSON output
+# Print the JSON outputs
 print(json_output)
 
 # Save the JSON to a file
